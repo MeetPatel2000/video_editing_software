@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Show Trimmed Video</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        text-align: center;
+      }
+
+      .video-container {
+        margin: 20px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .filter-options {
+        background-color: #fff;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin: 20px auto;
+        max-width: 600px;
+      }
+
+      h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      select,
+      input[type="file"],
+      input[type="range"],
+      button {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+      }
+
+      input[type="range"] {
+        cursor: pointer;
+      }
+
+      button {
+        background-color: #0074d9;
+        color: #fff;
+        font-weight: bold;
+      }
+
+      button:hover {
+        background-color: #0056a6;
+      }
+
+      audio {
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Trimmed Video</h1>
+    <div class="video-container">
+      <video width="40%" height="40%" controls id="filtered-video">
+        <source
+          src="{{ url_for('static', filename='trimmed/' + filename) }}"
+          type="video/mp4"
+        />
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <div class="filter-options">
+      <h2>Filter Options</h2>
+      <label for="filter-type">Select a Filter:</label>
+      <select id="filter-type" onchange="applyFilter(this.value)">
+        <option value="none">None</option>
+        <option value="grayscale">Grayscale</option>
+        <option value="color-corrector">Color Corrector</option>
+        <option value="rgb-curves">RGB Curves</option>
+        <option value="tint">Tint</option>
+        <option value="chroma-key">Chroma Key</option>
+        <!-- Add more filter options as needed -->
+      </select>
+      <label for="playback-speed">Playback Speed:</label>
+      <select id="playback-speed" onchange="applyPlaybackSpeed()">
+        <option value="0.1">0.1x</option>
+        <option value="0.5">0.5x</option>
+        <option value="1" selected>1x</option>
+        <option value="1.5">1.5x</option>
+        <option value="2">2x</option>
+      </select>
+      <input
+        type="text"
+        id="selectedVideoFilename"
+        value="{{ filename }}"
+        hidden
+      />
+
+      <input type="hidden" name="filter" id="filter" />
+
+      <label for="background-music">Background Music:</label>
+      <input
+        type="file"
+        id="background-music"
+        accept=".mp3, .wav"
+        onchange="applyBackgroundMusic()"
+      />
+      <button id="mute-button" onclick="toggleMute()">Mute Video</button>
+      <label for="music-start-time">Start Time:</label>
+      <input
+        type="range"
+        id="music-start-time"
+        min="0"
+        step="1"
+        value="0"
+        oninput="setMusicStartTime()"
+      />
+      <button onclick="decrementStartTime()">-</button>
+      <span id="music-start-time-label">0 seconds</span>
+      <button onclick="incrementStartTime()">+</button>
+      <span id="music-duration">Duration: 0 seconds</span>
+      <br /><br /><br />
+      <button id="save-button">Save Edited Video</button>
+
+      <!-- Add more filter options as needed -->
+    </div>
+    <audio id="background-audio" controls style="display: none"></audio>
+
+    <script>
+      function applyFilter(filterType) {
+        const videoElement = document.getElementById("filtered-video");
+        const filterInput = document.getElementById("filter");
+
+        // Remove any existing filters
+        videoElement.style.filter = "none";
+        filterInput.value = ""; // reset filter input
+
+        if (filterType === "grayscale") {
+          videoElement.style.filter = "grayscale(100%)";
+          filterInput.value = "grayscale"; // set filter input
+        } else if (filterType === "color-corrector") {
+          // Apply the Three-way Color Corrector filter
+          videoElement.style.filter =
+            "brightness(110%) contrast(90%) saturate(120%)";
+        } else if (filterType === "rgb-curves") {
+          // Apply the RGB Curves filter
+          videoElement.style.filter = "contrast(150%)";
+        } else if (filterType === "tint") {
+          // Apply a tint (e.g., red)
+          videoElement.style.filter = "sepia(100%) hue-rotate(120deg)";
+        } else if (filterType === "chroma-key") {
+          // Apply the Chroma Key filter (green screen)
+          videoElement.style.filter = "invert(75%)";
+        }
+        // Add more filter cases as needed
+      }
+      function applyPlaybackSpeed() {
+        const videoElement = document.getElementById("filtered-video");
+        const playbackSpeedDropdown = document.getElementById("playback-speed");
+
+        // Get the selected playback speed from the dropdown
+        const selectedSpeed = parseFloat(playbackSpeedDropdown.value);
+
+        // Set the playback rate of the video element
+        videoElement.playbackRate = selectedSpeed;
+      }
+
+      function decrementStartTime() {
+        const startTimeInput = document.getElementById("music-start-time");
+        if (startTimeInput) {
+          startTimeInput.value = parseInt(startTimeInput.value, 10) - 1;
+          setMusicStartTime();
+        }
+      }
+
+      function incrementStartTime() {
+        const startTimeInput = document.getElementById("music-start-time");
+        if (startTimeInput) {
+          startTimeInput.value = parseInt(startTimeInput.value, 10) + 1;
+          setMusicStartTime();
+        }
+      }
+
+      let backgroundMusic = null;
+      let videoElement = document.getElementById("filtered-video");
+      let musicStartTimeLabel = document.getElementById(
+        "music-start-time-label"
+      );
+      let musicDurationLabel = document.getElementById("music-duration");
+
+      // Start both video and background music from the beginning
+      videoElement.addEventListener("play", function () {
+        if (backgroundMusic) {
+          videoElement.currentTime = 0;
+          backgroundMusic.currentTime =
+            document.getElementById("music-start-time").value;
+          backgroundMusic.play();
+        }
+      });
+
+      // Stop background music when the video is paused or ended
+      videoElement.addEventListener("pause", function () {
+        if (backgroundMusic) {
+          backgroundMusic.pause();
+        }
+      });
+
+      // Automatically stop background music when the video ends
+      videoElement.addEventListener("ended", function () {
+        if (backgroundMusic) {
+          backgroundMusic.pause();
+        }
+      });
+
+      function applyBackgroundMusic() {
+        const backgroundAudio = document.getElementById("background-audio");
+        const musicInput = document.getElementById("background-music");
+        const musicStartTime =
+          document.getElementById("music-start-time").value;
+
+        // Stop any currently playing background music
+        if (backgroundMusic) {
+          backgroundMusic.pause();
+        }
+
+        // Load and play the selected background music with a specified start time
+        if (musicInput.files.length > 0) {
+          const file = musicInput.files[0];
+          const objectURL = URL.createObjectURL(file);
+
+          // Load metadata for the audio to get the duration
+          backgroundAudio.addEventListener("loadedmetadata", function () {
+            const duration = backgroundAudio.duration;
+            document.getElementById(
+              "music-duration"
+            ).innerText = `Duration: ${duration.toFixed(2)} seconds`;
+            document.getElementById("music-start-time").max = duration;
+            musicStartTimeLabel.innerText = `${musicStartTime} seconds`;
+          });
+
+          backgroundAudio.src = objectURL;
+          backgroundMusic = backgroundAudio;
+        }
+      }
+
+      function toggleMute() {
+        videoElement.muted = !videoElement.muted;
+      }
+
+      function setMusicStartTime() {
+        if (backgroundMusic) {
+          const musicStartTime =
+            document.getElementById("music-start-time").value;
+          backgroundMusic.currentTime = musicStartTime;
+          musicStartTimeLabel.innerText = `${musicStartTime} seconds`;
+        }
+      }
+
+      document
+        .getElementById("save-button")
+        .addEventListener("click", function () {
+          // Ensure the selectedVideoFilename element exists
+          const selectedVideoFilenameElem = document.getElementById(
+            "selectedVideoFilename"
+          );
+          let selectedVideoFilename = "";
+          if (selectedVideoFilenameElem) {
+            selectedVideoFilename = selectedVideoFilenameElem.value;
+          } else {
+            console.error("Element 'selectedVideoFilename' not found!");
+            return;
+          }
+
+          // Get the filter, playback speed, background music, and music start time
+          const filterType = document.getElementById("filter-type").value;
+          const playbackSpeed = document.getElementById("playback-speed").value;
+          const backgroundMusicFile =
+            document.getElementById("background-music").files[0];
+          const musicStartTime =
+            document.getElementById("music-start-time").value;
+
+          // Create a FormData object to handle the file upload
+          const formData = new FormData();
+          formData.append("videoFilename", selectedVideoFilename);
+          formData.append("filter", filterType);
+          formData.append("playbackSpeed", playbackSpeed);
+          if (backgroundMusicFile) {
+            formData.append("backgroundMusic", backgroundMusicFile);
+          }
+          formData.append("musicStartTime", musicStartTime);
+
+          // Make an AJAX request to the backend
+          fetch("/save", {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              alert(data.message); // Display a success message or handle the response appropriately
+            })
+            .catch((error) => {
+              console.error("Error saving video:", error);
+            });
+        });
+    </script>
+  </body>
+</html>
