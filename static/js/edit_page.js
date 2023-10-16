@@ -143,22 +143,26 @@ document
   });
 
 increaseStartTime.addEventListener("click", () => {
-  startRange.value = (parseFloat(startRange.value) + 0.1).toFixed(1);
+  startRange.value = (parseFloat(startRange.value) + 0.1).toFixed(1); // existing logic
+  video.currentTime = parseFloat(startRange.value);
   updateLabels();
 });
 
 decreaseStartTime.addEventListener("click", () => {
-  startRange.value = (parseFloat(startRange.value) - 0.1).toFixed(1);
+  startRange.value = (parseFloat(startRange.value) - 0.1).toFixed(1); // existing logic
+  video.currentTime = parseFloat(startRange.value);
   updateLabels();
 });
 
 increaseEndTime.addEventListener("click", () => {
-  endRange.value = (parseFloat(endRange.value) + 0.1).toFixed(1);
+  endRange.value = (parseFloat(endRange.value) + 0.1).toFixed(1); // existing logic
+  video.currentTime = parseFloat(endRange.value);
   updateLabels();
 });
 
 decreaseEndTime.addEventListener("click", () => {
-  endRange.value = (parseFloat(endRange.value) - 0.1).toFixed(1);
+  endRange.value = (parseFloat(endRange.value) - 0.1).toFixed(1); // existing logic
+  video.currentTime = parseFloat(endRange.value);
   updateLabels();
 });
 
