@@ -81,8 +81,12 @@ Extra code
     left: auto;
 }
 
+.scrubber-container {
+    position: relative;
+    overflow: hidden;
+}
 
-
-/*
-Extra code
-*/
+.left-scrubber, .right-scrubber {
+    position: absolute;
+    z-index: 1000;
+}

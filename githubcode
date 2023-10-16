@@ -1,0 +1,25 @@
+#chnage the directory if not the same
+
+1. cd /path/to/your/project
+
+#This means add all the files to stage means staging area
+
+2. git add .
+
+#Commit the Changes:
+
+3. git commit -m "Any message here"
+
+#Tag the Commit as a New Version:
+
+4. git tag -a v1.0.0 -m "Version 1.0.0 release notes or description"
+
+#Push Changes to GitHub:
+
+5. git push origin master
+
+#Push the New Tag to GitHub:
+
+6. git push origin v1.0.0
+
+change the version accordingly
