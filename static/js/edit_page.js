@@ -20,6 +20,9 @@ const decreaseEndTime = document.getElementById("decrease_end_time");
 // When the video metadata is loaded, get the video duration
 video.addEventListener("loadedmetadata", function () {
   videoDuration = video.duration;
+  console.log("Video duration:", videoDuration);
+  startRange.setAttribute("max", videoDuration);
+  endRange.setAttribute("max", videoDuration);
   startRange.value = 0;
   endRange.value = videoDuration;
   updateScrubbers();
@@ -116,11 +119,6 @@ video.addEventListener("timeupdate", function () {
     (video.currentTime < parseFloat(startRange.value) - Buffer ||
       video.currentTime > parseFloat(endRange.value)) + Buffer
   ) {
-    console.log("Current Time:", video.currentTime);
-    console.log("Start Range:", parseFloat(startRange.value));
-    console.log("End Range:", parseFloat(endRange.value));
-    console.log("Resetting video currentTime");
-    console.log("Resetting video currentTime");
     video.currentTime = parseFloat(startRange.value);
     +bu;
   } else {

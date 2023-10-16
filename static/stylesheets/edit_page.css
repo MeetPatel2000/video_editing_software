@@ -87,6 +87,6 @@ Extra code
 }
 
 .left-scrubber, .right-scrubber {
-    position: absolute;
+    position: relative;
     z-index: 1000;
 }
