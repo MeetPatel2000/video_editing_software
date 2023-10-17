@@ -230,5 +230,5 @@ def video_player():
 if __name__ == '__main__':
     app.run(debug=True)
     
-#checking the version v1.0.3
+#checking the version v1.0.4
 

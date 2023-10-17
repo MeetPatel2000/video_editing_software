@@ -52,6 +52,13 @@ const slide = (e) => {
 
   clearTimeout(timer);
   timer = setTimeout(stop, 66);
+
+  document.getElementById("startRangeInput").value = parseFloat(
+    e.detail.values[0]
+  );
+  document.getElementById("endRangeInput").value = parseFloat(
+    e.detail.values[1]
+  );
 };
 
 slider.addEventListener("mouseup", () => {
@@ -102,3 +109,17 @@ function initializeSlider() {
     document.querySelector("#PriceGradient .rangeHandle").focus();
   }, 1000);
 }
+
+document
+  .querySelector(".show-trimmed-button")
+  .addEventListener("click", function () {
+    video.currentTime = parseFloat(startRange.value);
+    video.play();
+
+    let interval = setInterval(() => {
+      if (video.currentTime >= parseFloat(endRange.value)) {
+        video.pause();
+        clearInterval(interval);
+      }
+    }, 100);
+  });

@@ -20,41 +20,16 @@
       />
       Your browser does not support the video tag.
     </video>
-    <!--New Code-->
-    <form method="POST" action="/trim_video">
-      <div class="timeline-container">
-        <div class="timeline">
-          <div class="scrubber" id="leftScrubber"></div>
-          <div class="scrubber" id="rightScrubber"></div>
-        </div>
-      </div>
-      <br /><br />
+    <br /><br />
 
-      <input
-        type="range"
-        name="start_time"
-        min="0"
-        max="100"
-        step="0.1"
-        hidden
-      />
-
-      <input type="range" name="end_time" min="0" max="100" step="0.1" hidden />
-      <label id="start_time_label">0 seconds</label>
-      <label id="end_time_label">0 seconds</label>
-
-      <!-- Ensure buttons don't submit form by setting type to "button" -->
-      <button type="button" id="increase_start_time">
-        Increase Start Time
-      </button>
-      <button type="button" id="decrease_start_time">
-        Decrease Start Time
-      </button>
-      <button type="button" id="increase_end_time">Increase End Time</button>
-      <button type="button" id="decrease_end_time">Decrease End Time</button>
-
-      <input type="submit" value="Trim Video" />
-    </form>
+    <main id="app">
+      <form method="POST" action="/trim_video">
+        <div id="slider"></div>
+        <input type="hidden" name="start_time" id="startRangeInput" />
+        <input type="hidden" name="end_time" id="endRangeInput" />
+        <input type="submit" value="Trim Video" />
+      </form>
+    </main>
 
     <a
       class="show-trimmed-button"
@@ -62,19 +37,6 @@
       >Show Trimmed Video</a
     >
 
-    <!--New Code-->
-    <!-- Add video editing features here -->
-
-    <main id="app">
-      <form method="POST" action="/trim_video">
-        <br /><br /><br /><br />
-        <div id="slider"></div>
-        <input type="submit" value="Trim Video" />
-      </form>
-    </main>
-
     <script type="module" src="static/js/slider.js"></script>
-
-    <script src="static/js/edit_page.js"></script>
   </body>
 </html>
