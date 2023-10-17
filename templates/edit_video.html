@@ -56,55 +56,25 @@
       <input type="submit" value="Trim Video" />
     </form>
 
+    <a
+      class="show-trimmed-button"
+      href="{{ url_for('show_trimmed_video', filename=video) }}"
+      >Show Trimmed Video</a
+    >
+
     <!--New Code-->
-
-    <form method="POST" action="/trim_video">
-      <label for="start_time">Start Time (seconds):</label>
-      <input
-        type="range"
-        name="start_time"
-        min="0"
-        max="video_duration"
-        step="0.1"
-        required
-      />
-      <span id="start_time_label">0 seconds</span>
-      <button type="button" id="decrease_start_time">-</button>
-      <button type="button" id="increase_start_time">+</button>
-      <br />
-      <label for="end_time">End Time (seconds):</label>
-      <input
-        type="range"
-        name="end_time"
-        min="0"
-        max="video_duration"
-        step="0.1"
-        required
-      />
-      <span id="end_time_label">0 seconds</span>
-      <button type="button" id="decrease_end_time">-</button>
-      <button type="button" id="increase_end_time">+</button>
-      <br />
-      <br />
-      <input type="submit" value="Trim Video" />
-    </form>
-
-    <form method="POST" action="/trim_video">
-      <label for="start_time">Start Time (seconds):</label>
-      <input type="number" name="start_time" step="0.1" required />
-      <br />
-      <label for="end_time">End Time (seconds):</label>
-      <input type="number" name="end_time" step="0.1" required />
-      <br />
-      <br />
-      <input type="submit" value="Trim Video" /> <br /><br /><br />
-      <a
-        class="show-trimmed-button"
-        href="{{ url_for('show_trimmed_video', filename=video) }}"
-        >Show Trimmed Video</a
-      >
-    </form>
     <!-- Add video editing features here -->
+
+    <main id="app">
+      <form method="POST" action="/trim_video">
+        <br /><br /><br /><br />
+        <div id="slider"></div>
+        <input type="submit" value="Trim Video" />
+      </form>
+    </main>
+
+    <script type="module" src="static/js/slider.js"></script>
+
     <script src="static/js/edit_page.js"></script>
   </body>
 </html>

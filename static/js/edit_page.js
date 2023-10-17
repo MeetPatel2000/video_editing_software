@@ -120,7 +120,6 @@ video.addEventListener("timeupdate", function () {
       video.currentTime > parseFloat(endRange.value)) + Buffer
   ) {
     video.currentTime = parseFloat(startRange.value);
-    +bu;
   } else {
     externallyModifiedTime = false;
   }
