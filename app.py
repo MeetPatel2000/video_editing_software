@@ -35,28 +35,35 @@ def allowed_file(filename):
 
 @app.route('/')
 def index():
-    return render_template('upload.html')
+    return render_template('home_page.html')
 
-@app.route('/upload', methods=['POST'], endpoint='upload')
-def upload_file():
-    if 'file' not in request.files:
-        return redirect(request.url)
-
-    file = request.files['file']
-
-    if file.filename == '':
-        return redirect(request.url)
     
-    if file and allowed_file(file.filename):
-        filename = file.filename
-        video_folder = app.config['UPLOAD_FOLDER']
-        file.save(os.path.join(video_folder, filename))  # Save the file to the upload folder
-        session['uploaded_filename'] = filename  # Store the filename in the session
-        flash('Upload successful', 'success')  # Optionally, you can use the flash message to indicate success
-        return redirect(url_for('upload_success'))
-    else:
-        flash('Invalid file format', 'error')  # Optionally, use flash to indicate the error
-        return redirect(request.url)
+@app.route('/upload', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            flash('No file part', 'error')
+            return redirect(request.url)
+
+        file = request.files['file']
+
+        if file.filename == '':
+            flash('No selected file', 'error')
+            return redirect(request.url)
+        
+        if file and allowed_file(file.filename):
+            filename = file.filename
+            video_folder = app.config['UPLOAD_FOLDER']
+            file.save(os.path.join(video_folder, filename))  # Save the file to the upload folder
+            session['uploaded_filename'] = filename  # Store the filename in the session
+            flash('Upload successful', 'success')  # Optionally, you can use the flash message to indicate success
+            return redirect(url_for('upload_success'))
+        else:
+            flash('Invalid file format', 'error')  # Optionally, use flash to indicate the error
+            return redirect(request.url)
+    else:  # for GET request
+        return render_template('upload.html')
+
 
 
 @app.route('/upload_success')
@@ -230,5 +237,5 @@ def video_player():
 if __name__ == '__main__':
     app.run(debug=True)
     
-#checking the version v1.0.4
+#checking the version v1.0.5
 

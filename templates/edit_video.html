@@ -10,10 +10,8 @@
   </head>
   <body>
     <h1>Edit Video</h1>
-    <h2>Uploaded Videos:</h2>
-    <br /><br />
 
-    <video id="video" width="70%" height="70%" controls>
+    <video id="video" width="50%" height="50%" controls>
       <source
         src="{{ url_for('play_video', filename=video)}}"
         type="video/mp4"
@@ -23,20 +21,21 @@
     <br /><br />
 
     <main id="app">
+      <div id="slider"></div>
       <form method="POST" action="/trim_video">
-        <div id="slider"></div>
         <input type="hidden" name="start_time" id="startRangeInput" />
         <input type="hidden" name="end_time" id="endRangeInput" />
+        <br /><br />
         <input type="submit" value="Trim Video" />
       </form>
     </main>
-
+    <br /><br />
     <a
       class="show-trimmed-button"
       href="{{ url_for('show_trimmed_video', filename=video) }}"
       >Show Trimmed Video</a
     >
-
+    <br /><br />
     <script type="module" src="static/js/slider.js"></script>
   </body>
 </html>

@@ -108,6 +108,18 @@ function initializeSlider() {
   setTimeout(() => {
     document.querySelector("#PriceGradient .rangeHandle").focus();
   }, 1000);
+
+  //   // Clone the tooltip
+  //   const originalTooltip = document.querySelector("#PriceGradient .rangeFloat");
+  //   const clonedTooltip = originalTooltip.cloneNode(true);
+  //   clonedTooltip.style.top = "80px"; // Adjust this value as per your design needs
+  //   originalTooltip.parentNode.appendChild(clonedTooltip);
+
+  //   // Assuming that the second tooltip can be differentiated by its order in the document
+  //   const originalTooltip2 = document.querySelectorAll(".rangeFloat")[1];
+  //   const clonedTooltip2 = originalTooltip2.cloneNode(true);
+  //   clonedTooltip2.style.top = "-80px"; // Adjust as needed
+  //   originalTooltip2.parentNode.appendChild(clonedTooltip2);
 }
 
 document
